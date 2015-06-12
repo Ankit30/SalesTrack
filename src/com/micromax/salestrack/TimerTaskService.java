@@ -449,11 +449,11 @@ public class TimerTaskService extends Service {
 
 		String netarray[] = netinfo.split(":");
 
-		String regMessage = "REG:02:01" + netarray[0] + ":02" + netarray[1] + ":03" + netarray[2] + ":04" + "MOBHIG0317" + ":05"
+		String regMessage = "REG:02:01" + netarray[0] + ":02" + netarray[1] + ":03" + netarray[2] + ":04" + "MOBHIG0333" + ":05"
 				+ serial_no + ":06" + "V1.0" + ":07" + softwareVersion + ":";
 
 		String checkSum = checkSumGeneratorNew(regMessage);
-		regMessageChecksum = "REG:02:01" + netarray[0] + ":02" + netarray[1] + ":03" + netarray[2] + ":04" + "MOBHIG0317" + ":05"
+		regMessageChecksum = "REG:02:01" + netarray[0] + ":02" + netarray[1] + ":03" + netarray[2] + ":04" + "MOBHIG0333" + ":05"
 				+ serial_no + ":06" + "V1.0" + ":07" + softwareVersion + ":" + checkSum;
 		System.out.println("regMessageChecksum: " + softwareVersion + " $$"+ regMessageChecksum);
 		return regMessageChecksum;

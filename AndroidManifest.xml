@@ -76,7 +76,7 @@
             </intent-filter>
         </service>
 
-        <activity
+       <!--  <activity
             android:name="com.micromax.salestrack.Test"
             android:label="@string/app_name" >
             <intent-filter>
@@ -84,7 +84,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>  
+        </activity> -->  
          <activity
             android:name="com.micromax.salestrack.TabletInfoActivity"
             android:label="@string/app_name"
