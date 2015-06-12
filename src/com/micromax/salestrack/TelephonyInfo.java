@@ -27,7 +27,7 @@ public final class TelephonyInfo {
 	private String sotwareVersion;
 	private static long subscriptionId;
 	private static final Class<?> mTelephonyManagerClass = TelephonyManager.class;
-	private static TelephonyManager mTelephonyManager = null;
+	private static TelephonyManager mTelephonyManager = null,tmSim1, tmSim2, tm;
 
 	public long getSubscriptionId() {
 		return subscriptionId;
@@ -111,7 +111,24 @@ public final class TelephonyInfo {
 				 telephonyInfo.networkType = String.valueOf(getTMinstancebysimId(simId).getNetworkType());
 				 telephonyInfo.isSIM1Ready = getTMinstancebysimId(0).getSimState()== TelephonyManager.SIM_STATE_READY; 
 				 telephonyInfo.isSIM2Ready = getTMinstancebysimId(1).getSimState()== TelephonyManager.SIM_STATE_READY;;
-			 }else{
+			 }else if(Setting.IS_TOPWEIZ){
+				 tmSim1 = (TelephonyManager)context.getSystemService(getTelephonyService(0));
+				 tmSim2 = (TelephonyManager)context.getSystemService(getTelephonyService(1));
+				 tm = (TelephonyManager)context.getSystemService(getTelephonyService(simId));
+				 telephonyInfo.imeiSIM1 = tmSim1.getDeviceId();
+				 telephonyInfo.imeiSIM2 = tmSim2.getDeviceId();
+
+				 telephonyInfo.networkOperator = tm.getNetworkOperator();
+
+				 telephonyInfo.cellLocation = (GsmCellLocation) tm.getCellLocation();
+
+				 telephonyInfo.networkType = String.valueOf(tm.getNetworkType());
+					
+				 telephonyInfo.isSIM1Ready = tmSim1.getSimState() == TelephonyManager.SIM_STATE_READY;
+				 telephonyInfo.isSIM2Ready = tmSim2.getSimState() == TelephonyManager.SIM_STATE_READY;;
+			 }
+			
+			else{
 				 telephonyInfo.imeiSIM1 = getDeviceInfoBySlotNew(context,"getDeviceId", 0); 
 				 telephonyInfo.imeiSIM2 =getDeviceInfoBySlotNew(context, "getDeviceId", 1);
 				 if(Setting.IS_LOLLIPOP){
@@ -162,6 +179,25 @@ public final class TelephonyInfo {
 	}
 	
 	
+	private static String getTelephonyService(int simId) {
+		Method method;
+		String telService = null;
+		try {
+			method = mTelephonyManagerClass.getMethod("getServiceName",String.class,int.class);
+			telService =  (String) method.invoke(null, Context.TELEPHONY_SERVICE,simId);
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		
+		return telService;
+	}
+
 	private static TelephonyManager getTMinstancebysimId(int simId) {
 		Class<?> telephonyClass;
 		try {

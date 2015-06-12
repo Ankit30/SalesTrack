@@ -56,7 +56,7 @@ public class BootCompleteReceiver extends BroadcastReceiver{
 				 registrationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				 PendingIntent pending = PendingIntent.getService(context, 0, registrationIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 
-				 long delay = 1000*60*30;
+				 long delay = 1000*60*10;
 				 long totalDelay = SystemClock.elapsedRealtime()+ delay;
 				 service.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, totalDelay, pending);	
 				 
