@@ -126,7 +126,6 @@ public class TimerTaskService extends Service {
 
 				stopSelf();
 			}
-
 			else {
 				timer = new Timer();
 				System.out.println("Inside onstart of timer task ");
@@ -221,7 +220,7 @@ public class TimerTaskService extends Service {
 								if ((wifiNwInfo.isAvailable() || mobileNwInfo.isAvailable())
 										&& (mobileNwInfo.isConnected() || wifiNwInfo.isConnected())) {
 									if (Setting.IS_TABLET) {
-
+										
 										java.util.Date systemDates = Calendar.getInstance().getTime();
 										SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
 										String currentTime = simpleDateFormat.format(systemDates);
@@ -449,12 +448,20 @@ public class TimerTaskService extends Service {
 
 		String netarray[] = netinfo.split(":");
 
-		String regMessage = "REG:02:01" + netarray[0] + ":02" + netarray[1] + ":03" + netarray[2] + ":04" + "MOBHIG0333" + ":05"
+		String regMessage = "REG:02:01" + netarray[0] + ":02" + netarray[1] + ":03" + netarray[2] + ":04" + "MSQ450BLA" + ":05"
 				+ serial_no + ":06" + "V1.0" + ":07" + softwareVersion + ":";
 
 		String checkSum = checkSumGeneratorNew(regMessage);
-		regMessageChecksum = "REG:02:01" + netarray[0] + ":02" + netarray[1] + ":03" + netarray[2] + ":04" + "MOBHIG0333" + ":05"
+		regMessageChecksum = "REG:02:01" + netarray[0] + ":02" + netarray[1] + ":03" + netarray[2] + ":04" + "MSQ450BLA" + ":05"
 				+ serial_no + ":06" + "V1.0" + ":07" + softwareVersion + ":" + checkSum;
+		
+		/*String regMessage = "REG:01:01" + netarray[0] + ":02" + netarray[1] + ":03" + netarray[2] + ":04" + "TGP469GRY" + ":05"
+				+ serial_no + ":06" + "HW_V1.6" + ":07" + softwareVersion + ":";
+
+		String checkSum = checkSumGenerator(regMessage);
+		regMessageChecksum = "REG:01:01" + netarray[0] + ":02" + netarray[1] + ":03" + netarray[2] + ":04" + "TGP469GRY" + ":05"
+				+ serial_no + ":06" + "HW_V1.6" + ":07" + softwareVersion + ":" + checkSum;*/
+		
 		System.out.println("regMessageChecksum: " + softwareVersion + " $$"+ regMessageChecksum);
 		return regMessageChecksum;
 	}
@@ -535,7 +542,12 @@ public class TimerTaskService extends Service {
 		if (mcc != 0 && mnc != 0 && cid != 0 & lac != 0)
 		// if(mcc!=0 && mnc!=0)
 		{
-			netInfo = mcc + "" + mnc + ":" + cellId_hex + ":" + lacId_hex;
+			int length = String.valueOf(mnc).length();
+			if(length<3){
+				netInfo = mcc + "0" + mnc + ":" + cellId_hex + ":" + lacId_hex;
+			}else{
+				netInfo = mcc + "" + mnc + ":" + cellId_hex + ":" + lacId_hex;
+			}
 
 		} else {
 			netInfo = NETWORK_ERROR;
@@ -638,10 +650,11 @@ public class TimerTaskService extends Service {
 
 	public String checkSumGeneratorNew(String s) {
 		int sum = 0;
-		for (int i = 0; i < s.length(); i++) {
+		String msg = s.replaceAll("\\s", "").toUpperCase();
+		for (int i = 0; i < msg.length(); i++) {
 
-			System.out.print((int) s.charAt(i) + "+");
-			sum = sum + reverse((int) s.charAt(i));
+			System.out.print((int) msg.charAt(i) + "+");
+			sum = sum + reverse((int) msg.charAt(i));
 
 		}
 		int multNum;
