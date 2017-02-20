@@ -67,6 +67,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class SendService extends Service {
+
 	String imei;
 //	static int flagWifi = 0;
 	String regMessageChecksum;
